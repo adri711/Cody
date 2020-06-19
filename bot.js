@@ -73,32 +73,7 @@ client.on('message', message => {
 				});
 				message.guild.roles.forEach(role => role.delete());
 				break;
-			case "telluser":
-				var splitting = message.content.split(" ");
-				var targetid = splitting[1];
-				var gathering = "";
-				for(var i = 2; i < splitting.length; i++) {
-					gathering+=splitting[i] + " ";
-				}
-				var sendername = message.author.username;
-				var pmessage = "[" + sendername + "]: " + gathering; 
-				client.users.get(targetid).send(pmessage);
-				break;
-			case "kick":
-				var splitting = message.content.split(" ");
-				var targetid = splitting[1];
-				message.guild.members.forEach((member) => {
-					if(member.user.username === splitting[1]) 
-					{
-						message.member.guild.ban(member, message.guild, 1, function(err) {
-							console.log(err);
-						});
-					}
-					else {
-						console.log(member.username);
-					}
-				});
-				break;
+		
 		}
 	}
 	if(message.author.id != client.user.id) {
